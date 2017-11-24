@@ -19,7 +19,7 @@ public class StockLIstCrawler {
 
 	private int endPage = 200;
 	
-	private String output = "/Users/James/James/crawler_result/finviz/stock-list"; 
+	private String output = ""; 
 
 	private WebDriver driver;
 
@@ -32,10 +32,11 @@ public class StockLIstCrawler {
 		setupSelenium();
 	}
 
-	public StockLIstCrawler(int startPage, int endPage) {
+	public StockLIstCrawler(int startPage, int endPage, String output) {
 		setupSelenium();
 		this.startPage = startPage;
 		this.endPage = endPage;
+		this.output = output;
 	}
 
 	public void getStockList() {
@@ -119,5 +120,6 @@ public class StockLIstCrawler {
 	
 	private void clean() {
 		driver.close();
+		driver.quit();
 	}
 }
