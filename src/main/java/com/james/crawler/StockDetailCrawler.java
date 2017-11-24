@@ -1,5 +1,6 @@
 package com.james.crawler;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,8 @@ public class StockDetailCrawler {
 
 	private String ticker = "";
 	
-	private String output = "/Users/James/James/crawler_result/finviz/stock-detail";
-
+	private String finalOutPath = "";
+	
 	private WebDriver driver;
 
 	private WebDriverWait wait;
@@ -32,16 +33,21 @@ public class StockDetailCrawler {
 
 	public StockDetailCrawler() {
 		super();
-		setupSelenium();
 	}
 
-	public StockDetailCrawler(String ticker, String date) {
+	public boolean initCrawler(String ticker, String date, String output) {
+		this.ticker = ticker;
+		this.finalOutPath = output + "/" + date;
+		if(isFileExist()) return false;
+		
 		try {
 			setupSelenium();
-			this.ticker = ticker;
-			this.writer = new PrintWriter(output + "/" + date + "/" + this.ticker + ".txt", "UTF-8");
+			new File(finalOutPath).mkdirs();
+			this.writer = new PrintWriter(finalOutPath + "/" + this.ticker + ".txt", "UTF-8");
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -265,6 +271,11 @@ public class StockDetailCrawler {
 		
 		System.out.println();
 		System.out.println();
+	}
+	
+	private boolean isFileExist() {
+		File file = new File(finalOutPath + "/" + this.ticker + ".txt");
+		return file.exists() && file.length() != 0;		
 	}
 
 	private void setupSelenium() {
